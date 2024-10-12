@@ -11,12 +11,12 @@ model = AutoModelForCausalLM.from_pretrained(
 
 # Function to generate a multiple-choice question
 def generate_mcq(context, max_new_tokens, temperature):
-    # Create the prompt with the context only
+    # Create the prompt with the context only (remove the second placeholder)
     alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với hướng dẫn và ngữ cảnh. Hãy viết một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
     ### Ngữ cảnh
     {}
     ### Phản hồi
-    {}""".format(context,'')
+    """.format(context)
 
     # Tokenize the prompt
     inputs = tokenizer(alpaca_prompt, return_tensors="pt")
