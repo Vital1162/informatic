@@ -40,7 +40,7 @@ iface = gr.Interface(
     fn=generate_mcq,
     inputs=[
         gr.Textbox(label="Ngữ cảnh (Context)", placeholder="Nhập ngữ cảnh ở đây...", lines=3),
-        gr.Slider(label="Số lượng từ mới tối đa (Max New Tokens)", minimum=1, maximum=300, value=180, step=1),
+        gr.Slider(label="Số lượng từ mới tối đa (Max New Tokens)", minimum=1, maximum=512, value=255, step=1),
         # gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=1.0, step=0.1),
     ],
     outputs=gr.Textbox(label="Câu hỏi trắc nghiệm (MCQ)", lines=5),
