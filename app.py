@@ -5,10 +5,10 @@ from IPython.utils import io
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
-
-
+#beyoru/informatic_merged_full_training
+#beyoru/informatic_merged_full_training_dpo
 with io.capture_output() as captured:
-    tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
+    tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training_dpo")
     model = AutoModelForCausalLM.from_pretrained(
         "beyoru/informatic_merged_full_training",
         load_in_4bit = True
