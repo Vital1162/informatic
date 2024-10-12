@@ -2,7 +2,10 @@ import gradio as gr
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from IPython.utils import io
+import warnings
 
+# Suppress specific warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
     model = AutoModelForCausalLM.from_pretrained(
@@ -22,20 +25,13 @@ def generate_mcq(context, max_new_tokens, temperature):
     # Tokenize the prompt
     inputs = tokenizer(alpaca_prompt, return_tensors="pt")
 
-    # Generate output
-    with torch.no_grad():
-        output = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            num_return_sequences=1,
-            do_sample=True  # Enable sampling for more varied output
-        )
+    prompt = alpaca_prompt.format(content)
+    inputs = tokenizer(prompt, return_tensors="pt")
+    output = model.generate(**inputs, max_new_tokens=255)
+    answer = tokenizer.decode(output[0], skip_special_tokens=True)
+    answer = answer.replace(prompt, "")
 
-    # Decode the output to get the text
-    question = tokenizer.decode(output[0], skip_special_tokens=True)
-
-    return question
+    return answer
 
 # Gradio interface
 iface = gr.Interface(
