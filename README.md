@@ -1,1 +1,4 @@
-## Informatic: The MCQ generation model for informatic course
+## Informatic: The MCQ generation model for informatics course
+
+Require: GPU
+
