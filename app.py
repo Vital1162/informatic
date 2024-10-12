@@ -16,6 +16,7 @@ with io.capture_output() as captured:
     model = AutoModelForCausalLM.from_pretrained(
         "beyoru/informatic_merged_full_training",
         quantization_config=bnb_config,
+        low_cpu_mem_usage = False,
     )
 
 def generate_mcq(context, max_new_tokens, temperature, top_p, top_k, frequency_penalty, presence_penalty):
