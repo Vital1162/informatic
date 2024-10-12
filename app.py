@@ -1,6 +1,7 @@
 import gradio as gr
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from IPython.utils import io
 
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
