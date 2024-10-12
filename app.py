@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training_dpo")
     model = AutoModelForCausalLM.from_pretrained(
-        "beyoru/informatic_merged_full_training",
+        "beyoru/informatic_merged_full_training_dpo",
         load_in_4bit = True
         # quantization_config=BitsAndBytesConfig(load_in_4bit=True),
         # low_cpu_mem_usage = True
