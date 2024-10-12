@@ -4,7 +4,9 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from IPython.utils import io
 import warnings
 
+# Suppress specific warnings
 warnings.filterwarnings("ignore", category=UserWarning)
+
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
     model = AutoModelForCausalLM.from_pretrained(
@@ -13,26 +15,25 @@ with io.capture_output() as captured:
     )
 
 # Function to generate a multiple-choice question
-    def generate_mcq(context, max_new_tokens):
-        # Create the prompt with the context only (remove the second placeholder)
-        alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với với hướng dẫn và ngữ cảnh. Hãy viêt một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
-        
-        ### Ngữ cảnh
-        {}
-        
-        ### Phản hổi
-        {}"""
+def generate_mcq(context, max_new_tokens):
+    # Create the prompt with the context only (remove the second placeholder)
+    alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với với hướng dẫn và ngữ cảnh. Hãy viêt một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
     
-        # Tokenize the prompt
-        inputs = tokenizer(alpaca_prompt, return_tensors="pt")
+    ### Ngữ cảnh
+    {}
     
-        prompt = alpaca_prompt.format(context,'')
-        inputs = tokenizer(prompt, return_tensors="pt")
-        output = model.generate(**inputs, max_new_tokens=max_new_tokens)
-        answer = tokenizer.decode(output[0], skip_special_tokens=True)
-        answer = answer.replace(prompt, "")
+    ### Phản hồi
+    {}"""
+
+    # Tokenize the prompt
+    prompt = alpaca_prompt.format(context, '')
+    inputs = tokenizer(prompt, return_tensors="pt")
     
-        return answer
+    output = model.generate(**inputs, max_new_tokens=max_new_tokens)
+    answer = tokenizer.decode(output[0], skip_special_tokens=True)
+    answer = answer.replace(prompt, "")
+
+    return answer
 
 # Gradio interface
 iface = gr.Interface(
