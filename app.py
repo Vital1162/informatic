@@ -4,7 +4,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from IPython.utils import io
 import warnings
 
-Suppress specific warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
