@@ -32,7 +32,7 @@ def generate_mcq(context, max_new_tokens, frequency_penalty):
         **inputs,
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
-        # repetition_penalty=frequency_penalty,
+        repetition_penalty=frequency_penalty,
         # do_sample=True
     )
     answer = tokenizer.decode(output[0], skip_special_tokens=True)
@@ -48,7 +48,7 @@ iface = gr.Interface(
         # gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=0.7, step=0.1),
         # gr.Slider(label="Top-p (Nucleus Sampling)", minimum=0.0, maximum=1.0, value=0.9, step=0.01),
         # gr.Slider(label="Top-k", minimum=1, maximum=100, value=50, step=1),
-        # gr.Slider(label="Frequency Penalty", minimum=0.0, maximum=2.0, value=0.5, step=0.1),
+        gr.Slider(label="Frequency Penalty", minimum=0.0, maximum=1.0, value=0.5, step=0.1),
         # gr.Slider(label="Presence Penalty", minimum=0.0, maximum=2.0, value=0.0, step=0.1),
     ],
     outputs=gr.Textbox(label="Câu hỏi trắc nghiệm (MCQ)", lines=10),
