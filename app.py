@@ -25,7 +25,7 @@ def generate_mcq(context, max_new_tokens, temperature):
     # Tokenize the prompt
     inputs = tokenizer(alpaca_prompt, return_tensors="pt")
 
-    prompt = alpaca_prompt.format(content)
+    prompt = alpaca_prompt.format(context)
     inputs = tokenizer(prompt, return_tensors="pt")
     output = model.generate(**inputs, max_new_tokens=255)
     answer = tokenizer.decode(output[0], skip_special_tokens=True)
@@ -39,7 +39,7 @@ iface = gr.Interface(
     inputs=[
         gr.Textbox(label="Ngữ cảnh (Context)", placeholder="Nhập ngữ cảnh ở đây...", lines=3),
         gr.Slider(label="Số lượng từ mới tối đa (Max New Tokens)", minimum=1, maximum=300, value=150, step=1),
-        gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=2.0, value=1.0, step=0.1),
+        gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=1.0, step=0.1),
     ],
     outputs=gr.Textbox(label="Câu hỏi trắc nghiệm (MCQ)", lines=5),
     title="Gradio Chatbot for MCQ Generation",
