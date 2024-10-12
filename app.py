@@ -16,7 +16,7 @@ with io.capture_output() as captured:
         # low_cpu_mem_usage = True
     )
 
-def generate_mcq(context, max_new_tokens, frequency_penalty):
+def generate_mcq(context, max_new_tokens, temperature ,frequency_penalty):
     alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với với hướng dẫn và ngữ cảnh. Hãy viêt một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
     
     ### Ngữ cảnh
