@@ -4,7 +4,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from IPython.utils import io
 import warnings
 
-# Suppress specific warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 with io.capture_output() as captured:
@@ -14,9 +13,7 @@ with io.capture_output() as captured:
         load_in_4bit=True,
     )
 
-# Function to generate a multiple-choice question
-def generate_mcq(context, max_new_tokens):
-    # Create the prompt with the context only (remove the second placeholder)
+def generate_mcq(context, max_new_tokens, temperature, top_p, top_k, frequency_penalty, presence_penalty):
     alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với với hướng dẫn và ngữ cảnh. Hãy viêt một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
     
     ### Ngữ cảnh
@@ -29,19 +26,31 @@ def generate_mcq(context, max_new_tokens):
     prompt = alpaca_prompt.format(context, '')
     inputs = tokenizer(prompt, return_tensors="pt")
     
-    output = model.generate(**inputs, max_new_tokens=max_new_tokens)
+    # Generate the output with specified parameters
+    output = model.generate(
+        **inputs,
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        top_k=top_k,
+        repetition_penalty=frequency_penalty,
+        do_sample=True
+    )
     answer = tokenizer.decode(output[0], skip_special_tokens=True)
     answer = answer.replace(prompt, "")
 
     return answer
 
-# Gradio interface
 iface = gr.Interface(
     fn=generate_mcq,
     inputs=[
         gr.Textbox(label="Ngữ cảnh (Context)", placeholder="Nhập ngữ cảnh ở đây...", lines=3),
         gr.Slider(label="Số lượng từ mới tối đa (Max New Tokens)", minimum=1, maximum=512, value=255, step=1),
-        # gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=1.0, step=0.1),
+        gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=0.7, step=0.1),
+        gr.Slider(label="Top-p (Nucleus Sampling)", minimum=0.0, maximum=1.0, value=0.9, step=0.01),
+        gr.Slider(label="Top-k", minimum=1, maximum=100, value=50, step=1),
+        gr.Slider(label="Frequency Penalty", minimum=0.0, maximum=2.0, value=0.5, step=0.1),
+        gr.Slider(label="Presence Penalty", minimum=0.0, maximum=2.0, value=0.0, step=0.1),
     ],
     outputs=gr.Textbox(label="Câu hỏi trắc nghiệm (MCQ)", lines=5),
     title="Informatic",
