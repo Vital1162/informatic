@@ -20,7 +20,7 @@ def generate_mcq(context, max_new_tokens, temperature):
     ### Ngữ cảnh
     {}
     ### Phản hồi
-    """.format(context)
+    {}""".format(context,'')
 
     # Tokenize the prompt
     inputs = tokenizer(alpaca_prompt, return_tensors="pt")
