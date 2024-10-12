@@ -49,4 +49,4 @@ iface = gr.Interface(
 )
 
 # Launch the Gradio interface with sharing enabled
-iface.launch(share=True)
+iface.launch(share=True, debug=True)
