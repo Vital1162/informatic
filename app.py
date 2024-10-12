@@ -2,12 +2,12 @@ import gradio as gr
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Load the tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
-model = AutoModelForCausalLM.from_pretrained(
-    "beyoru/informatic_merged_full_training",
-    load_in_4bit=True,
-)
+with io.capture_output() as captured:
+    tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
+    model = AutoModelForCausalLM.from_pretrained(
+        "beyoru/informatic_merged_full_training",
+        load_in_4bit=True,
+    )
 
 # Function to generate a multiple-choice question
 def generate_mcq(context, max_new_tokens, temperature):
