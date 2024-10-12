@@ -2,7 +2,7 @@ import gradio as gr
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# Load tokenizer and model
+# Load the tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
 model = AutoModelForCausalLM.from_pretrained(
     "beyoru/informatic_merged_full_training",
@@ -11,34 +11,30 @@ model = AutoModelForCausalLM.from_pretrained(
 
 # Function to generate a multiple-choice question
 def generate_mcq(context, max_new_tokens, temperature):
-    try:
-        # Prepare the prompt
-        alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với hướng dẫn và ngữ cảnh. Hãy viết một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
-        ### Ngữ cảnh
-        {}
-        ### Phản hồi
-        """.format(context)
+    # Create the prompt with the context only
+    alpaca_prompt = """Sau đây là hướng dẫn mô tả một nhiệm vụ, kết hợp với hướng dẫn và ngữ cảnh. Hãy viết một phản hồi là một câu hỏi trắc nghiệm và cung cấp 4 lựa chọn đáp án khác nhau. Hãy chắc chắn rằng mỗi đáp án đều khác biệt, và xác định rõ đáp án đúng.
+    ### Ngữ cảnh
+    {}
+    ### Phản hồi
+    {}""".format(context,'')
 
-        # Tokenize the prompt
-        inputs = tokenizer(alpaca_prompt, return_tensors="pt").to(model.device)
+    # Tokenize the prompt
+    inputs = tokenizer(alpaca_prompt, return_tensors="pt")
 
-        # Generate output
-        with torch.no_grad():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=max_new_tokens,
-                temperature=temperature,
-                num_return_sequences=1,
-                do_sample=True
-            )
+    # Generate output
+    with torch.no_grad():
+        output = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            num_return_sequences=1,
+            do_sample=True  # Enable sampling for more varied output
+        )
 
-        # Decode the output to get the text
-        answer = tokenizer.decode(output[0], skip_special_tokens=True)
-        answer = answer.replace(alpaca_prompt, "")
+    # Decode the output to get the text
+    question = tokenizer.decode(output[0], skip_special_tokens=True)
 
-        return answer
-    except Exception as e:
-        return f"Error: {str(e)}"
+    return question
 
 # Gradio interface
 iface = gr.Interface(
