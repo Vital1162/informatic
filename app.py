@@ -44,7 +44,7 @@ iface = gr.Interface(
         # gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=1.0, step=0.1),
     ],
     outputs=gr.Textbox(label="Câu hỏi trắc nghiệm (MCQ)", lines=5),
-    title="Gradio Chatbot for MCQ Generation",
+    title="Informatic",
     description="Nhập ngữ cảnh để tạo một câu hỏi trắc nghiệm",
 )
 
