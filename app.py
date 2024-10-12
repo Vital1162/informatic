@@ -17,22 +17,28 @@ def generate_mcq(context, max_new_tokens, temperature):
     {}""".format(context)
 
     # Tokenize the prompt
-    inputs = tokenizer(alpaca_prompt, return_tensors="pt").to(model.device)
+    # inputs = tokenizer(alpaca_prompt, return_tensors="pt").to(model.device)
 
-    # Generate output
-    with torch.no_grad():
-        output = model.generate(
-            **inputs,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            num_return_sequences=1,
-            do_sample=True  # Enable sampling for more varied output
-        )
+    # # Generate output
+    # with torch.no_grad():
+    #     output = model.generate(
+    #         **inputs,
+    #         max_new_tokens=max_new_tokens,
+    #         temperature=temperature,
+    #         num_return_sequences=1,
+    #         do_sample=True  # Enable sampling for more varied output
+    #     )
 
-    # Decode the output to get the text
-    question = tokenizer.decode(output[0], skip_special_tokens=True)
+    # # Decode the output to get the text
+    # question = tokenizer.decode(output[0], skip_special_tokens=True)
 
-    return question
+    prompt = alpaca_prompt.format(content, "")
+    inputs = tokenizer(prompt, return_tensors="pt")
+    output = model.generate(**inputs, max_new_tokens=max_new_tokens, temperature=temperature, do_sample=True )
+    answer = tokenizer.decode(output[0], skip_special_tokens=True)
+    answer = answer.replace(prompt, "")
+
+    return answer
 
 # Gradio interface
 iface = gr.Interface(
