@@ -32,7 +32,7 @@ def generate_mcq(context, max_new_tokens, frequency_penalty):
         max_new_tokens=max_new_tokens,
         # temperature=temperature,
         # repetition_penalty=frequency_penalty,
-        do_sample=True
+        # do_sample=True
     )
     answer = tokenizer.decode(output[0], skip_special_tokens=True)
     answer = answer.replace(prompt, "")
