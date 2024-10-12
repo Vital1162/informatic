@@ -6,10 +6,6 @@ import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,  # Enable 4-bit quantization
-    # bnb_4bit_use_double_quant=True,  # Optional: Double quantization (if you need it)
-)
 
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
