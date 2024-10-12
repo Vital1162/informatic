@@ -11,8 +11,9 @@ with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
     model = AutoModelForCausalLM.from_pretrained(
         "beyoru/informatic_merged_full_training",
-        quantization_config=BitsAndBytesConfig(load_in_4bit=True),
-        low_cpu_mem_usage = True
+        load_in_4bit = True
+        # quantization_config=BitsAndBytesConfig(load_in_4bit=True),
+        # low_cpu_mem_usage = True
     )
 
 def generate_mcq(context, max_new_tokens, frequency_penalty):
