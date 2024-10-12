@@ -1,16 +1,21 @@
 import gradio as gr
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from IPython.utils import io
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,  # Enable 4-bit quantization
+    # bnb_4bit_use_double_quant=True,  # Optional: Double quantization (if you need it)
+)
+
 with io.capture_output() as captured:
     tokenizer = AutoTokenizer.from_pretrained("beyoru/informatic_merged_full_training")
     model = AutoModelForCausalLM.from_pretrained(
         "beyoru/informatic_merged_full_training",
-        load_in_4bit=True,
+        quantization_config=bnb_config,
     )
 
 def generate_mcq(context, max_new_tokens, temperature, top_p, top_k, frequency_penalty, presence_penalty):
@@ -22,11 +27,9 @@ def generate_mcq(context, max_new_tokens, temperature, top_p, top_k, frequency_p
     ### Phản hồi
     {}"""
 
-    # Tokenize the prompt
     prompt = alpaca_prompt.format(context, '')
     inputs = tokenizer(prompt, return_tensors="pt")
     
-    # Generate the output with specified parameters
     output = model.generate(
         **inputs,
         max_new_tokens=max_new_tokens,
@@ -57,5 +60,4 @@ iface = gr.Interface(
     description="Nhập ngữ cảnh để tạo một câu hỏi trắc nghiệm",
 )
 
-# Launch the Gradio interface with sharing enabled
 iface.launch(share=True, debug=True)
