@@ -43,7 +43,7 @@ def generate_mcq(model_name, context, max_new_tokens, temperature, frequency_pen
 iface = gr.Interface(
     fn=generate_mcq,
     inputs=[
-        gr.Textbox(label="Tên mô hình (Model Name)", placeholder="Nhập tên mô hình ở đây...", lines=1, value="beyoru/informatic_merged_full_training_dpo"),
+        gr.Textbox(label="Tên mô hình (Model Name)", placeholder="Nhập mô hình ở đây...", lines=1, value="beyoru/informatic_merged_full_training_dpo"),
         gr.Textbox(label="Ngữ cảnh (Context)", placeholder="Nhập ngữ cảnh ở đây...", lines=3),
         gr.Slider(label="Số lượng từ mới tối đa (Max New Tokens)", minimum=1, maximum=512, value=255, step=1),
         gr.Slider(label="Nhiệt độ (Temperature)", minimum=0.0, maximum=1.0, value=0.7, step=0.1),
